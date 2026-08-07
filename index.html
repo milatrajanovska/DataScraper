@@ -1,0 +1,1030 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>IT Products Scraper</title>-->
+<!--    <style>-->
+<!--        body {-->
+<!--            font-family: Arial, sans-serif;-->
+<!--            background: #f4f4f9;-->
+<!--            margin: 0;-->
+<!--            padding: 20px;-->
+<!--        }-->
+<!--        h1 {-->
+<!--            text-align: center;-->
+<!--            color: #333;-->
+<!--        }-->
+<!--        form {-->
+<!--            max-width: 600px;-->
+<!--            margin: 20px auto;-->
+<!--            background: #fff;-->
+<!--            padding: 20px;-->
+<!--            border-radius: 8px;-->
+<!--            box-shadow: 0 2px 5px rgba(0,0,0,0.1);-->
+<!--        }-->
+<!--        label {-->
+<!--            display: block;-->
+<!--            margin: 10px 0 5px;-->
+<!--            font-weight: bold;-->
+<!--        }-->
+<!--        input, select {-->
+<!--            width: 100%;-->
+<!--            padding: 8px;-->
+<!--            margin-bottom: 15px;-->
+<!--            border: 1px solid #ddd;-->
+<!--            border-radius: 4px;-->
+<!--        }-->
+<!--        #options {-->
+<!--            display: flex;-->
+<!--            gap: 15px;-->
+<!--            margin-bottom: 15px;-->
+<!--        }-->
+<!--        button {-->
+<!--            background: #007acc;-->
+<!--            color: #fff;-->
+<!--            border: none;-->
+<!--            padding: 10px 15px;-->
+<!--            border-radius: 4px;-->
+<!--            cursor: pointer;-->
+<!--        }-->
+<!--        button:hover {-->
+<!--            background: #005fa3;-->
+<!--        }-->
+<!--        #listItems{-->
+<!--            display: none;-->
+<!--            margin-left:100px;-->
+<!--        }-->
+<!--        #listItems span{-->
+<!--            color: #090978;-->
+<!--            background: #b5d5ec;-->
+<!--            border-radius: 4px ;-->
+<!--            padding: 5px;-->
+<!--            margin-right: 8px;-->
+<!--        }-->
+<!--        #filter{-->
+<!--            display: inline-block;-->
+<!--            width: 20%;-->
+<!--        }-->
+<!--        #found{-->
+<!--            display:inline-block;-->
+<!--            margin-right: 450px;-->
+<!--        }-->
+<!--        .product-card {-->
+<!--            display: flex;-->
+<!--            align-items: center;-->
+<!--            justify-content: space-between;-->
+<!--            gap: 20px;-->
+<!--            background: #ffffff;-->
+<!--            border: 1px solid #e5e7eb;-->
+<!--            border-radius: 10px;-->
+<!--            padding: 14px 20px;-->
+<!--            width: 100%;-->
+<!--            max-width: 700px;-->
+<!--            margin-bottom: 20px;-->
+
+<!--        }-->
+
+<!--        .product-card:hover {-->
+<!--            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);-->
+<!--            transform: translateY(-2px);-->
+<!--        }-->
+<!--        .product-card-header {-->
+<!--            display: flex;-->
+<!--            flex-direction: column;-->
+<!--            gap: 4px;-->
+<!--            flex: 1;-->
+<!--            min-width: 0;-->
+<!--        }-->
+
+<!--        .product-card-name {-->
+<!--            font-size: 15px;-->
+<!--            font-weight: 600;-->
+<!--            color: #111827;-->
+<!--            margin: 0;-->
+<!--            /*white-space: nowrap;*/-->
+<!--            line-height: 1.4;-->
+<!--            overflow: hidden;-->
+<!--            text-overflow: ellipsis;-->
+<!--        }-->
+<!--        .product-card-spec {-->
+<!--            font-size: 13px;-->
+<!--            color: #9ca3af;-->
+<!--            margin: 0;-->
+<!--        }-->
+
+<!--        .product-card-source {-->
+<!--            font-size: 13px;-->
+<!--            font-weight: 500;-->
+<!--            color: #2563eb;-->
+<!--            background: #dbeafe;-->
+<!--            padding: 4px 12px;-->
+<!--            border-radius: 8px;-->
+<!--            white-space: nowrap;-->
+<!--        }-->
+
+<!--        .product-card-price {-->
+<!--            font-size: 16px;-->
+<!--            font-weight: 600;-->
+<!--            color: #111827;-->
+<!--            white-space: nowrap;-->
+
+<!--        }-->
+<!--        #items{-->
+<!--            margin-left:18%;-->
+<!--        }-->
+<!--        .product-card-image{-->
+<!--            width:90px;-->
+<!--            height:90px;-->
+<!--            object-fit: contain;-->
+<!--            flex-shrink:0;-->
+<!--        }-->
+<!--        .product-card-quantity {-->
+<!--            font-size: 13px;-->
+<!--            font-weight: 500;-->
+<!--            color: #065f46;          /* зелена */-->
+<!--            margin-top: 4px;-->
+<!--            display: flex;-->
+<!--            align-items: center;-->
+<!--            gap: 6px;-->
+<!--        }-->
+<!--        .product-card-quantity::before {-->
+<!--            content: "📦";           /* икона за пакет */-->
+<!--            font-size: 14px;-->
+<!--        }-->
+
+
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--<h1>Scrape IT Products</h1>-->
+<!--<form id="form">-->
+<!--    <label for="category">Product Category</label>-->
+<!--    <select id="category" name="category">-->
+<!--        <option value="laptops">Laptops</option>-->
+<!--        <option value="monitors">Monitors</option>-->
+<!--        <option value="keyboards">Keyboards</option>-->
+<!--        <option value="mice">Mice</option>-->
+<!--    </select>-->
+
+<!--    <label for="brand">Brand</label>-->
+<!--    <input type="text" id="brand" name="brand" placeholder="e.g., Lenovo, HP">-->
+
+<!--    <label for="price">Max Price (€)</label>-->
+<!--    <input type="number" id="price" name="price" placeholder="e.g., 1000">-->
+
+<!--    <label>Output Format</label>-->
+<!--    <div id="options">-->
+<!--        <label><input type="radio" name="output" value="excel"> Excel</label>-->
+<!--        <label><input type="radio" name="output" value="web" checked> Show on Website</label>-->
+<!--    </div>-->
+
+<!--    <button id="submit" type="submit" >Scrape Now</button>-->
+<!--</form>-->
+<!--<div id="listItems">-->
+<!--    <div>-->
+<!--        <p>Критериуми на пребарување</p>-->
+<!--        <span id="catInfo">Категорија:</span>-->
+<!--        <span id="brandInfo">Бренд:</span>-->
+<!--        <span id="priceInfo">Цена до:</span>-->
+<!--    </div>-->
+<!--    <p id="found" ></p>-->
+<!--    <select id="filter" >-->
+<!--        <option value="fromLowest">Цена: од најниска</option>-->
+<!--        <option value="fromHighest">Цена: од највисока</option>-->
+<!--        <option value="alphabetical">Име</option>-->
+<!--    </select>-->
+<!--    <div id="items">-->
+
+<!--    </div>-->
+<!--    <button onclick="Back()"><- Back</button>-->
+<!--</div>-->
+
+
+<!--<script>-->
+<!--    let currentProducts=[]-->
+<!--    let currentMaxPrice;-->
+<!--    const store_ids={-->
+<!--        1:"Setec",-->
+<!--        2:"Neptun",-->
+<!--        3:"Anhoch"-->
+<!--    }-->
+<!--    function Back() {-->
+<!--        document.getElementById("form").style.display="block";-->
+<!--        document.getElementById("listItems").style.display="none";-->
+<!--    }-->
+<!--    document.getElementById("submit").addEventListener("click", function(e) {-->
+<!--        e.preventDefault();-->
+
+<!--        let category = document.getElementById('category').value;-->
+<!--        let brand = document.getElementById('brand').value;-->
+<!--        let max_price = document.getElementById('price').value;-->
+<!--        currentMaxPrice=max_price;-->
+<!--        const selected = document.querySelector('input[name="output"]:checked').value;-->
+
+<!--        console.log(selected); // "web" или "excel"-->
+
+<!--       fetch("http://localhost:3000/search",{-->
+<!--            method:"POST",-->
+<!--            headers:{-->
+<!--                "Content-Type": "application/json",-->
+<!--            },-->
+<!--            body: JSON.stringify({-->
+<!--                "category": category,-->
+<!--                "brand": brand,-->
+<!--                "price": max_price,-->
+<!--                "selected": selected,-->
+<!--            })-->
+<!--        })-->
+<!--        .then(response => {-->
+<!--            if(selected==="excel") {-->
+<!--                return response.blob()-->
+<!--            }else{-->
+<!--                return response.json()-->
+<!--            }-->
+<!--        })-->
+<!--           .then(data => {-->
+<!--               console.log(data)-->
+<!--               console.log(data instanceof Blob);-->
+<!--               if(selected==="excel"){-->
+
+
+<!--                   const url=window.URL.createObjectURL(data);-->
+
+
+<!--                   const a=document.createElement("a");-->
+
+<!--                   a.href=url;-->
+
+<!--                   a.download="products.xlsx";-->
+
+<!--                   document.body.appendChild(a);-->
+
+<!--                   a.click();-->
+
+
+<!--                   a.remove();-->
+<!--                   window.URL.revokeObjectURL(url);-->
+
+<!--               }-->
+<!--               else{-->
+<!--                   currentProducts=data;-->
+<!--                   let filter=document.getElementById("filter").value;-->
+<!--                   if (filter==="fromLowest"){-->
+<!--                       data.sort((a,b)=> a.price - b.price)-->
+<!--                   }else if(filter==="fromHighest"){-->
+<!--                       data.sort((a,b)=> b.price - a.price)-->
+<!--                   }else{-->
+<!--                       data.sort((a,b)=> a.title.localeCompare(b.name))-->
+<!--                   }-->
+
+<!--                   showDataOnDisplay(data,category,brand,max_price);-->
+<!--                   console.log(data);-->
+<!--               }-->
+
+<!--           })-->
+<!--           .catch(error => {-->
+<!--               console.log("Greska:",error);-->
+<!--           })-->
+<!--    });-->
+
+<!--    document.getElementById("filter").addEventListener("change", function() {-->
+<!--        let filter = document.getElementById("filter").value;-->
+<!--        if (filter === "fromLowest") {-->
+<!--            currentProducts.sort((a,b)=> a.price - b.price);-->
+<!--        } else if (filter === "fromHighest") {-->
+<!--            currentProducts.sort((a,b)=> b.price - a.price);-->
+<!--        } else {-->
+<!--            currentProducts.sort((a,b)=> a.title.localeCompare(b.name));-->
+<!--        }-->
+
+<!--        // земи ги вредностите повторно-->
+<!--        let category = document.getElementById('category').value;-->
+<!--        let brand = document.getElementById('brand').value;-->
+
+<!--        showDataOnDisplay(currentProducts, category, brand, currentMaxPrice);-->
+<!--    });-->
+
+
+<!--    function showDataOnDisplay(products,category,brand,price){-->
+<!--        let itemsDiv=document.getElementById('items');-->
+<!--        let form=document.getElementById("form")-->
+<!--        form.style.display="none";-->
+<!--        document.getElementById("listItems").style.display='block';-->
+<!--        itemsDiv.innerHTML="";-->
+<!--        document.getElementById("catInfo").innerHTML=`Категорија: ${category}`;-->
+<!--        document.getElementById("priceInfo").innerHTML=`Цена до: ${price}`;-->
+<!--        document.getElementById("brandInfo").innerHTML=`Бренд: ${brand}`;-->
+<!--        document.getElementById("found").innerHTML=` Пронајдени се ${products.length} продукти од 3 продавници`;-->
+
+
+<!--        products.forEach(p => {-->
+<!--            console.log(p.image)-->
+<!--            let image_url=p.image.replaceAll("'","");-->
+<!--            console.log(image_url);-->
+<!--            let div=document.createElement("div");-->
+<!--            div.classList.add("product-card");-->
+
+<!--            div.innerHTML=`-->
+<!--            <img class="product-card-image" src="${image_url}" ">-->
+<!--                <div class="product-card-header">-->
+<!--                <p class="product-card-name">${p.title}</p>-->
+<!--                <p class="product-card-quantity">Quantity:${p.quantity}</p>-->
+<!--                <p class="product-card-spec"></p>-->
+<!--                </div>-->
+<!--                <span class="product-card-source">${store_ids[p.store_id]}</span>-->
+<!--                <p class="product-card-price">${p.price}</p>-->
+<!--            `;-->
+<!--            itemsDiv.appendChild(div);-->
+<!--        })-->
+
+<!--    }-->
+<!--</script>-->
+
+
+
+<!--</body>-->
+<!--</html>-->
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT Products Scraper</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root{
+            --bg:            #f1f5f9;
+            --surface:       #ffffff;
+            --surface-2:     #f8fafc;
+            --border:        #e2e8f0;
+            --ink:           #0f172a;
+            --ink-soft:      #475569;
+            --ink-faint:     #94a3b8;
+            --accent:        #3b5bfd;
+            --accent-ink:    #eef1ff;
+            --accent-hover:  #2c46e0;
+            --ok:            #059669;
+            --ok-bg:         #ecfdf5;
+            --ok-border:     #a7f3d0;
+            --warn:          #d97706;
+            --warn-bg:       #fffbeb;
+            --warn-border:   #fde68a;
+            --danger:        #dc2626;
+            --danger-bg:     #fef2f2;
+            --danger-border: #fecaca;
+            --radius-lg:     16px;
+            --radius-md:     12px;
+            --radius-sm:     8px;
+            --shadow-sm:     0 1px 2px rgba(15,23,42,.04);
+            --shadow-md:     0 4px 16px rgba(15,23,42,.06);
+            --shadow-lg:     0 12px 32px rgba(15,23,42,.10);
+            --mono: 'JetBrains Mono', ui-monospace, monospace;
+        }
+
+        *{ box-sizing:border-box; }
+
+        body{
+            margin:0;
+            padding:32px 20px 60px;
+            font-family:'Inter', system-ui, -apple-system, sans-serif;
+            background:
+                    radial-gradient(circle at 15% 0%, #eef1ff 0%, transparent 45%),
+                    var(--bg);
+            color:var(--ink);
+            min-height:100vh;
+        }
+
+        h1{
+            text-align:center;
+            font-size:28px;
+            font-weight:800;
+            letter-spacing:-0.02em;
+            margin:0 0 4px;
+        }
+
+        .eyebrow{
+            text-align:center;
+            color:var(--ink-faint);
+            font-family:var(--mono);
+            font-size:12px;
+            letter-spacing:.12em;
+            text-transform:uppercase;
+            margin:0 0 28px;
+        }
+
+        /* ---------- FORM ---------- */
+        form{
+            max-width:640px;
+            margin:0 auto 20px;
+            background:var(--surface);
+            padding:28px;
+            border-radius:var(--radius-lg);
+            border:1px solid var(--border);
+            box-shadow:var(--shadow-md);
+        }
+
+        .field-row{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:16px;
+        }
+
+        label{
+            display:block;
+            margin:0 0 6px;
+            font-weight:600;
+            font-size:13px;
+            color:var(--ink-soft);
+        }
+
+        input[type="text"], input[type="number"], select#category{
+            width:100%;
+            padding:11px 12px;
+            margin-bottom:16px;
+            border:1.5px solid var(--border);
+            border-radius:var(--radius-sm);
+            font-family:inherit;
+            font-size:14px;
+            color:var(--ink);
+            background:var(--surface-2);
+            transition:border-color .15s ease, box-shadow .15s ease, background .15s ease;
+        }
+
+        input[type="text"]:focus, input[type="number"]:focus, select#category:focus{
+            outline:none;
+            border-color:var(--accent);
+            background:var(--surface);
+            box-shadow:0 0 0 3px var(--accent-ink);
+        }
+
+        input::placeholder{ color:var(--ink-faint); }
+
+        #options{
+            display:flex;
+            gap:8px;
+            background:var(--surface-2);
+            border:1.5px solid var(--border);
+            padding:4px;
+            border-radius:10px;
+            margin-bottom:18px;
+        }
+
+        #options label{
+            flex:1;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            gap:6px;
+            margin:0;
+            padding:9px 10px;
+            border-radius:7px;
+            font-size:13px;
+            font-weight:600;
+            color:var(--ink-soft);
+            cursor:pointer;
+            transition:background .15s ease, color .15s ease, box-shadow .15s ease;
+        }
+
+        #options input[type="radio"]{
+            accent-color:var(--accent);
+            margin:0;
+        }
+
+        #options label:has(input:checked){
+            background:var(--surface);
+            color:var(--accent);
+            box-shadow:var(--shadow-sm);
+        }
+
+        button{
+            width:100%;
+            background:var(--accent);
+            color:#fff;
+            border:none;
+            padding:13px 18px;
+            border-radius:var(--radius-sm);
+            font-size:14px;
+            font-weight:700;
+            letter-spacing:.01em;
+            cursor:pointer;
+            transition:background .15s ease, transform .1s ease;
+        }
+
+        button:hover{ background:var(--accent-hover); }
+        button:active{ transform:translateY(1px); }
+
+        /* ---------- RESULTS HEADER ---------- */
+        #listItems{
+            display:none;
+            max-width:1100px;
+            margin:0 auto;
+        }
+
+        .results-topbar{
+            background:var(--surface);
+            border:1px solid var(--border);
+            border-radius:var(--radius-lg);
+            padding:18px 22px;
+            margin-bottom:20px;
+            box-shadow:var(--shadow-sm);
+            display:flex;
+            flex-wrap:wrap;
+            align-items:center;
+            justify-content:space-between;
+            gap:14px;
+        }
+
+        .criteria-title{
+            width:100%;
+            margin:0 0 10px;
+            font-size:12px;
+            font-weight:700;
+            text-transform:uppercase;
+            letter-spacing:.1em;
+            color:var(--ink-faint);
+        }
+
+        .criteria-tags{
+            display:flex;
+            flex-wrap:wrap;
+            gap:8px;
+        }
+
+        #listItems span.tag{
+            color:var(--accent);
+            background:var(--accent-ink);
+            border-radius:999px;
+            padding:6px 12px;
+            font-size:12.5px;
+            font-weight:600;
+            font-family:var(--mono);
+        }
+
+        #found{
+            margin:14px 0 16px;
+            font-size:14px;
+            color:var(--ink-soft);
+            font-weight:500;
+        }
+
+        #found strong{ color:var(--ink); font-family:var(--mono); }
+
+        .toolbar{
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            margin-bottom:18px;
+        }
+
+        #filter{
+            padding:9px 14px;
+            border-radius:var(--radius-sm);
+            border:1.5px solid var(--border);
+            background:var(--surface);
+            font-family:inherit;
+            font-size:13px;
+            font-weight:600;
+            color:var(--ink);
+            cursor:pointer;
+        }
+
+        #filter:focus{ outline:none; border-color:var(--accent); }
+
+        .back-btn{
+            width:auto;
+            background:var(--surface);
+            color:var(--ink-soft);
+            border:1.5px solid var(--border);
+            padding:9px 16px;
+            font-weight:600;
+            font-size:13px;
+        }
+        .back-btn:hover{ background:var(--surface-2); color:var(--ink); }
+
+        /* ---------- PRODUCT GRID ---------- */
+        #items{
+            display:grid;
+            grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));
+            gap:18px;
+            margin-bottom:24px;
+        }
+
+        .product-card{
+            display:flex;
+            flex-direction:column;
+            gap:12px;
+            background:var(--surface);
+            border:1px solid var(--border);
+            border-radius:var(--radius-md);
+            padding:18px;
+            box-shadow:var(--shadow-sm);
+            transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+        }
+
+        .product-card:hover{
+            transform:translateY(-4px);
+            box-shadow:var(--shadow-lg);
+            border-color:#c7d2fe;
+        }
+
+        .product-card-top{
+            display:flex;
+            align-items:flex-start;
+            justify-content:space-between;
+            gap:10px;
+        }
+
+        .product-card-image{
+            width:72px;
+            height:72px;
+            object-fit:contain;
+            flex-shrink:0;
+            border-radius:var(--radius-sm);
+            background:var(--surface-2);
+            border:1px solid var(--border);
+            padding:6px;
+        }
+
+        .product-card-source{
+            font-size:11.5px;
+            font-weight:700;
+            letter-spacing:.03em;
+            text-transform:uppercase;
+            color:var(--accent);
+            background:var(--accent-ink);
+            padding:5px 10px;
+            border-radius:999px;
+            white-space:nowrap;
+        }
+
+        .product-card-header{
+            display:flex;
+            flex-direction:column;
+            gap:4px;
+            flex:1;
+            min-width:0;
+        }
+
+        .product-card-name{
+            font-size:14.5px;
+            font-weight:700;
+            color:var(--ink);
+            margin:0;
+            line-height:1.4;
+        }
+
+        .product-card-spec{
+            font-size:12.5px;
+            color:var(--ink-faint);
+            margin:0;
+        }
+
+        .product-card-bottom{
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            margin-top:auto;
+            padding-top:12px;
+            border-top:1px dashed var(--border);
+        }
+
+        .product-card-price{
+            font-family:var(--mono);
+            font-size:17px;
+            font-weight:700;
+            color:var(--ink);
+            margin:0;
+        }
+
+        /* Stock badge — dynamic color via data-level */
+        .product-card-quantity{
+            font-family:var(--mono);
+            font-size:11.5px;
+            font-weight:700;
+            letter-spacing:.02em;
+            padding:5px 10px 5px 8px;
+            border-radius:999px;
+            display:inline-flex;
+            align-items:center;
+            gap:6px;
+            border:1px solid transparent;
+            white-space:nowrap;
+        }
+
+        .product-card-quantity::before{
+            content:"";
+            width:7px;
+            height:7px;
+            border-radius:50%;
+            background:currentColor;
+            flex-shrink:0;
+        }
+
+        .product-card-quantity[data-level="high"]{
+            color:var(--ok);
+            background:var(--ok-bg);
+            border-color:var(--ok-border);
+        }
+        .product-card-quantity[data-level="medium"]{
+            color:var(--warn);
+            background:var(--warn-bg);
+            border-color:var(--warn-border);
+        }
+        .product-card-quantity[data-level="low"]{
+            color:var(--danger);
+            background:var(--danger-bg);
+            border-color:var(--danger-border);
+        }
+        .product-card-quantity[data-level="none"]{
+            color:var(--ink-faint);
+            background:var(--surface-2);
+            border-color:var(--border);
+        }
+
+        .empty-state{
+            grid-column:1/-1;
+            text-align:center;
+            padding:60px 20px;
+            color:var(--ink-faint);
+            font-size:14px;
+        }
+
+        .product-search {
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f8faff;
+            border: 1px solid #dfe6f5;
+            border-radius: 12px;
+            padding: 10px 10px;
+        }
+
+        .product-search input {
+            width: 100%;
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 16px;
+            margin-bottom: 0px;
+        }
+
+        @media (max-width:560px){
+            .field-row{ grid-template-columns:1fr; }
+            form{ padding:20px; }
+            .toolbar{ flex-direction:column; align-items:stretch; gap:10px; }
+        }
+    </style>
+</head>
+<body>
+
+<h1>Scrape IT Products</h1>
+<p class="eyebrow">Live price comparison across 3 stores</p>
+
+<form id="form">
+    <div class="field-row">
+        <div>
+            <label for="category">Product Category</label>
+            <select id="category" name="category">
+                <option value="laptops">Laptops</option>
+                <option value="monitors">Monitors</option>
+                <option value="keyboards">Keyboards</option>
+                <option value="mice">Mice</option>
+            </select>
+        </div>
+        <div>
+            <label for="brand">Brand</label>
+            <input type="text" id="brand" name="brand" placeholder="e.g., Lenovo, HP">
+        </div>
+    </div>
+
+    <label for="price">Max Price (€)</label>
+    <input type="number" id="price" name="price" placeholder="e.g., 1000">
+
+    <label>Output Format</label>
+    <div id="options">
+        <label><input type="radio" name="output" value="excel"> 📊 Excel</label>
+        <label><input type="radio" name="output" value="web" checked> 🖥️ Show on Website</label>
+    </div>
+
+    <button id="submit" type="submit">Scrape Now</button>
+</form>
+
+<div id="listItems">
+    <div class="results-topbar">
+        <div style="width:100%">
+            <p class="criteria-title">Search criteria</p>
+            <div class="criteria-tags">
+                <span class="tag" id="catInfo">Category:</span>
+                <span class="tag" id="brandInfo">Brand:</span>
+                <span class="tag" id="priceInfo">Max price:</span>
+            </div>
+            <div class="product-search">
+                <span class="search-icon">🔍</span>
+
+                <input
+                        type="text"
+                        id="productSearch"
+                        placeholder="Search products..."
+                >
+            </div>
+        </div>
+    </div>
+
+    <p id="found"></p>
+
+    <div class="toolbar">
+        <button class="back-btn" onclick="Back()" type="button">← Back to search</button>
+        <select id="filter">
+            <option value="fromLowest">Price: low to high</option>
+            <option value="fromHighest">Price: high to low</option>
+            <option value="alphabetical">Name (A–Z)</option>
+        </select>
+    </div>
+
+    <div id="items"></div>
+</div>
+
+<script>
+    let currentProducts = [];
+    let currentMaxPrice;
+    const store_ids = {
+        1: "Setec",
+        2: "Neptun",
+        3: "Anhoch"
+    };
+
+    function Back() {
+        document.getElementById("form").style.display = "block";
+        document.getElementById("listItems").style.display = "none";
+    }
+
+    // Determine stock badge level from quantity
+    function stockLevel(qty) {
+        const n = Number(qty);
+        if (!n || n <= 0) return { level: "none", label: "Out of stock" };
+        if (n <= 5) return { level: "low", label: `${n} left` };
+        if (n <= 20) return { level: "medium", label: `${n} in stock` };
+        return { level: "high", label: `${n} in stock` };
+    }
+
+    document.getElementById("submit").addEventListener("click", function (e) {
+        e.preventDefault();
+
+        let category = document.getElementById('category').value;
+        let brand = document.getElementById('brand').value;
+        let max_price = document.getElementById('price').value;
+        currentMaxPrice = max_price;
+        const selected = document.querySelector('input[name="output"]:checked').value;
+
+        console.log(selected); // "web" или "excel"
+
+        fetch("http://localhost:3000/search", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                "category": category,
+                "brand": brand,
+                "price": max_price,
+                "selected": selected,
+            })
+        })
+            .then(response => {
+                if (selected === "excel") {
+                    return response.blob();
+                } else {
+                    return response.json();
+                }
+            })
+            .then(data => {
+                console.log(data);
+                console.log(data instanceof Blob);
+                if (selected === "excel") {
+
+                    const url = window.URL.createObjectURL(data);
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = "products.xlsx";
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    window.URL.revokeObjectURL(url);
+
+                } else {
+                    currentProducts = data;
+                    let filter = document.getElementById("filter").value;
+                    if (filter === "fromLowest") {
+                        data.sort((a, b) => a.price - b.price);
+                    } else if (filter === "fromHighest") {
+                        data.sort((a, b) => b.price - a.price);
+                    } else {
+                        data.sort((a, b) => a.title.localeCompare(b.name));
+                    }
+
+                    showDataOnDisplay(data, category, brand, max_price);
+                    console.log(data);
+                }
+            })
+            .catch(error => {
+                console.log("Greska:", error);
+            });
+    });
+
+    document.getElementById("filter").addEventListener("change", function () {
+        let filter = document.getElementById("filter").value;
+        if (filter === "fromLowest") {
+            currentProducts.sort((a, b) => a.price - b.price);
+        } else if (filter === "fromHighest") {
+            currentProducts.sort((a, b) => b.price - a.price);
+        } else {
+            currentProducts.sort((a, b) => a.title.localeCompare(b.name));
+        }
+
+        let category = document.getElementById('category').value;
+        let brand = document.getElementById('brand').value;
+
+        showDataOnDisplay(currentProducts, category, brand, currentMaxPrice);
+    });
+
+    function showDataOnDisplay(products, category, brand, price) {
+        let itemsDiv = document.getElementById('items');
+        let form = document.getElementById("form");
+        form.style.display = "none";
+        document.getElementById("listItems").style.display = 'block';
+        itemsDiv.innerHTML = "";
+        document.getElementById("catInfo").innerHTML = `Category: ${category || "—"}`;
+        document.getElementById("priceInfo").innerHTML = `Max price: ${price ?price+ " денари "  : "—"}`;
+        document.getElementById("brandInfo").innerHTML = `Brand: ${brand || "—"}`;
+        document.getElementById("found").innerHTML = `Found <strong>${products.length}</strong> products across 3 stores`;
+
+        if (!products.length) {
+            itemsDiv.innerHTML = `<div class="empty-state">No products matched your search. Try adjusting the filters.</div>`;
+            return;
+        }
+
+        products.forEach(p => {
+            let image_url=""
+            if(p.image) {
+                 image_url = p.image.replaceAll("'", "");
+            }
+            let stock = stockLevel(p.quantity);
+
+            let div = document.createElement("div");
+            div.classList.add("product-card");
+            let displayImage=image_url;
+            if(image_url.includes("anhoch.com")||image_url.includes("neptun.mk")){
+                displayImage=`http://localhost:3000/img-proxy?url=${encodeURIComponent(image_url)}`
+            }
+
+            div.innerHTML = `
+                <div class="product-card-top">
+                    <img class="product-card-image" src="${displayImage}" alt="${p.title}">
+                    <span class="product-card-source">${store_ids[p.store_id] || "Store"}</span>
+                </div>
+                <div class="product-card-header">
+                    <p class="product-card-name">${p.title}</p>
+                    <p class="product-card-spec"></p>
+                </div>
+                <div class="product-card-bottom">
+                    <p class="product-card-price">${p.price} денари</p>
+                    <span class="product-card-quantity" data-level="${stock.level}">${stock.label}</span>
+                </div>
+            `;
+
+            let img = div.querySelector(".product-card-image");
+
+            img.onload = () => {
+                console.log("✅ Image loaded:", image_url);
+            };
+
+            img.onerror = () => {
+                console.error("❌ Image FAILED:", image_url);
+            };
+            itemsDiv.appendChild(div);
+        });
+    }
+
+    const searchInput = document.getElementById("productSearch");
+    searchInput.addEventListener("input", function () {
+        const seacrhText=this.value.toLowerCase().trim();
+
+        const filterProducts=currentProducts.filter(p=>
+            p.title.toLowerCase().includes(seacrhText)
+        );
+        let category = document.getElementById('category').value;
+        let brand = document.getElementById('brand').value;
+
+        showDataOnDisplay(filterProducts, category, brand, currentMaxPrice);
+    })
+</script>
+
+</body>
+</html>
